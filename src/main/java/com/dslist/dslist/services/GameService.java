@@ -3,6 +3,7 @@ package com.dslist.dslist.services;
 import com.dslist.dslist.dto.GameDTO;
 import com.dslist.dslist.dto.GameMinDTO;
 import com.dslist.dslist.entities.Game;
+import com.dslist.dslist.projections.GameMinProjection;
 import com.dslist.dslist.repositories.GameRespository;
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll(){
         List<Game> result = gameRespository.findAll();
+        return  result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId){
+        List<GameMinProjection> result = gameRespository.searchByList(listId);
         return  result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 
